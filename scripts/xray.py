@@ -16,7 +16,7 @@ def get_token(xrayurl):
         'password': os.environ['xray_pwd']
     }
 
-    resp = requests.post(f'{xrayurl}/api/v1/auth/token', json=payload, headers=headers, verify=False)
+    resp = requests.post(f'{xrayurl}/api/v1/auth/token', json=payload, headers=headers, verify=True)
     if resp.status_code == 200:
         return resp.json()['token']
     else:
@@ -49,7 +49,7 @@ def get_violations(token, xrayurl, watch, severity):
                 }
         }
 
-        resp = requests.post(f'{xrayurl}/api/v1/violations', headers=headers, data=json.dumps(data), verify=False)
+        resp = requests.post(f'{xrayurl}/api/v1/violations', headers=headers, data=json.dumps(data), verify=True)
      
         if resp.status_code == 200:
             with open('osa.json', 'w', encoding="utf-8") as f: json.dump(resp.json(), f, ensure_ascii=False)
@@ -73,7 +73,7 @@ def get_violations_details(token, url):
         'Authorization': f"Bearer {token}"
     }
     
-    resp = requests.get(url, headers=headers, verify=False)
+    resp = requests.get(url, headers=headers, verify=True)
     if resp.status_code == 200:
         violation_details = resp.json()
         package_details = violation_details['infected_components'][0].split(':')
